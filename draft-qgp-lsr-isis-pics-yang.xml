@@ -215,46 +215,48 @@ module: ietf-isis-pics
       <artwork>
 module: ietf-isis-pics-8667
   +--rw isis-pics-8667
-     +--rw sr-capability-support
-     |  +--rw mpls-ipv4?   boolean
-     |  +--rw mpls-ipv6?   boolean
+     +--rw sr-capability-sub-tlv-support!
+     |  +--rw i-bit-support?   boolean
+     |  +--rw v-bit-support?   boolean
      +--rw prefix-sid-sub-tlv-support!
      |  +--rw r-bit-support?          boolean
      |  +--rw n-bit-support?          boolean
-     |  +--rw p-bit?                  boolean
-     |  +--rw e-bit?                  boolean
-     |  +--rw v-bit?                  boolean
-     |  +--rw l-bit?                  boolean
+     |  +--rw p-bit-support?          boolean
+     |  +--rw e-bit-support?          boolean
+     |  +--rw v-bit-support?          boolean
+     |  +--rw l-bit-support?          boolean
      |  +--rw supported-algorithms*   uint8
      +--rw adj-sid-sub-tlv-support!
-     |  +--rw f-bit?            boolean
-     |  +--rw b-bit?            boolean
-     |  +--rw vi-bit?           boolean
-     |  +--rw lo-bit?           boolean
-     |  +--rw s-bit?            boolean
-     |  +--rw pe-bit?           boolean
+     |  +--rw f-bit-support?    boolean
+     |  +--rw b-bit-support?    boolean
+     |  +--rw v-bit-support?    boolean
+     |  +--rw l-bit-support?    boolean
+     |  +--rw s-bit-support?    boolean
+     |  +--rw p-bit-support?    boolean
      |  +--rw weight-support?   boolean
      +--rw lan-adj-sid-sub-tlv-support!
-     |  +--rw f-bit?            boolean
-     |  +--rw b-bit?            boolean
-     |  +--rw vi-bit?           boolean
-     |  +--rw lo-bit?           boolean
-     |  +--rw s-bit?            boolean
-     |  +--rw pe-bit?           boolean
+     |  +--rw f-bit-support?    boolean
+     |  +--rw b-bit-support?    boolean
+     |  +--rw v-bit-support?    boolean
+     |  +--rw l-bit-support?    boolean
+     |  +--rw s-bit-support?    boolean
+     |  +--rw p-bit-support?    boolean
      |  +--rw weight-support?   boolean
      +--rw sid-label-tlv-support!
      +--rw sid-lable-binding-tlv-support!
-     |  +--rw f-bit?   boolean
-     |  +--rw m-bit?   boolean
-     |  +--rw s-bit?   boolean
-     |  +--rw d-bit?   boolean
-     |  +--rw a-bit?   boolean
+     |  +--rw f-bit-support?   boolean
+     |  +--rw m-bit-support?   boolean
+     |  +--rw s-bit-support?   boolean
+     |  +--rw d-bit-support?   boolean
+     |  +--rw a-bit-support?   boolean
      +--rw mt-sid-label-binding-tlv-support!
-     |  +--rw f-bit?   boolean
-     |  +--rw m-bit?   boolean
-     |  +--rw s-bit?   boolean
-     |  +--rw d-bit?   boolean
-     |  +--rw a-bit?   boolean
+     |  +--rw f-bit-support?   boolean
+     |  +--rw m-bit-support?   boolean
+     |  +--rw s-bit-support?   boolean
+     |  +--rw d-bit-support?   boolean
+     |  +--rw a-bit-support?   boolean
+     +--rw sr-algorith-tlv-support!
+     |  +--rw algo-support*   uint8
      +--rw sr-lb-tlv-support!
      +--rw srms-preference-tlv-support!
       </artwork>
@@ -468,6 +470,92 @@ module ietf-isis-pics-8667 {
       "RFC XXXX: YANG Data Model for IS-IS PICS.";
   }
 
+  grouping adj-sid-flags {
+    description
+      "The grouping for adj-sid and lan-adj-sid sub-tlv flags
+       and weight.";
+
+    leaf f-bit-support {
+      type boolean;
+      default false;
+      description
+        "Support of address-Family flag.";
+    }
+    leaf b-bit-support {
+      type boolean;
+      default false;
+      description
+        "Support of Backup Flag.";
+    }
+    leaf v-bit-support {
+      type boolean;
+      default false;
+      description
+        "Support of Value flag.";
+    }
+    leaf l-bit-support {
+      type boolean;
+      default false;
+      description
+        "Support of Local flag.";
+    }
+    leaf s-bit-support {
+      type boolean;
+      default false;
+      description
+        "Support of Set flag.";
+    }
+    leaf p-bit-support {
+      type boolean;
+      default false;
+      description
+        "Support of Persistent flag.";
+    }
+    leaf weight-support {
+      type boolean;
+      default false;
+      description
+        "Support of the weight of the Adj-SID for the purpose
+         of load balancing.";
+    }
+  }
+
+  grouping sid-label-binding-tlv-flags {
+    description
+      "The grouping for sid/label binding tlv and multi-topology
+       sid/label binding tlv flags.";
+      leaf f-bit-support {
+        type boolean;
+        default false;
+        description
+          "Support of Address-Family flag.";
+      }
+      leaf m-bit-support {
+        type boolean;
+        default false;
+        description
+          "Support of Mirror Context Flag.";
+      }
+      leaf s-bit-support {
+        type boolean;
+        default false;
+        description
+          "Support of S-flag.";
+      }
+      leaf d-bit-support {
+        type boolean;
+        default false;
+        description
+          "Support of D-flag.";
+
+      }
+      leaf a-bit-support {
+        type boolean;
+        default false;
+        description
+          "Support of A-flag.";
+      }
+  }
   container isis-pics-8667 {
     when "/isis-pics:isis-pics/isis-pics:supported-isis-pics "
        + "= 'rfc-8667'" {
@@ -480,14 +568,18 @@ module ietf-isis-pics-8667 {
        for RFC 8667: IS-IS Extensions for Segment Routing.";
 
 
-    container sr-capability-support {
-      leaf mpls-ipv4 {
+    container sr-capability-sub-tlv-support {
+      description
+        "Support of sr-capability sub-tlv.";
+      presence "Support of sr-capability sub-tlv.";
+
+      leaf i-bit-support {
         type boolean;
         default false;
         description
           "support mpls-ipv4 capability.";
       }
-      leaf mpls-ipv6 {
+      leaf v-bit-support {
         type boolean;
         default false;
         description
@@ -495,6 +587,8 @@ module ietf-isis-pics-8667 {
       }
     }
     container prefix-sid-sub-tlv-support {
+      description
+        "Support of prefix-sid sub-tlv.";
       presence "Support of prefix sid sub-tlv.";
       leaf r-bit-support {
         type boolean;
@@ -508,25 +602,25 @@ module ietf-isis-pics-8667 {
         description
           "Support of Node-SID Flag.";
       }
-      leaf p-bit {
+      leaf p-bit-support {
         type boolean;
         default false;
         description
           "Support of No-PHP Flag.";
       }
-      leaf e-bit {
+      leaf e-bit-support {
         type boolean;
         default false;
         description
           "Support of Explicit NUll Flag.";
       }
-      leaf v-bit {
+      leaf v-bit-support {
         type boolean;
         default false;
         description
           "Support of Value Flag.";
       }
-      leaf l-bit {
+      leaf l-bit-support {
         type boolean;
         default false;
         description
@@ -539,121 +633,49 @@ module ietf-isis-pics-8667 {
            supports.";
       }
     }
+
     container adj-sid-sub-tlv-support {
-      presence "Support of adjacency sid sub-tlv.";
-      leaf f-bit {
-        type boolean;
-        default false;
-      }
-      leaf b-bit {
-        type boolean;
-        default false;
-      }
-      leaf vi-bit {
-        type boolean;
-        default false;
-      }
-      leaf lo-bit {
-        type boolean;
-        default false;
-      }
-      leaf s-bit {
-        type boolean;
-        default false;
-      }
-      leaf pe-bit {
-        type boolean;
-        default false;
-      }
-      leaf weight-support {
-        type boolean;
-        default false;
-        description
-          "Support of the weight of the Adj-SID for the purpose
-           of load balancing.";
-      }
+      description
+        "Support of Adjacency Segment Identifier sub-tlv.";
+      presence "Support of adj-sid sub-tlv.";
+      uses adj-sid-flags;
     }
+
     container lan-adj-sid-sub-tlv-support {
+      description
+        "Support of LAN adj-sid sub-tlv.";
       presence "Support of LAN adjacency sid sub-tlv.";
-      leaf f-bit {
-        type boolean;
-        default false;
-      }
-      leaf b-bit {
-        type boolean;
-        default false;
-      }
-      leaf vi-bit {
-        type boolean;
-        default false;
-      }
-      leaf lo-bit {
-        type boolean;
-        default false;
-      }
-      leaf s-bit {
-        type boolean;
-        default false;
-      }
-      leaf pe-bit {
-        type boolean;
-        default false;
-      }
-      leaf weight-support {
-        type boolean;
-        default false;
-        description
-          "Support of the weight of the Adj-SID for the purpose
-           of load balancing.";
-      }
+      uses adj-sid-flags;
     }
+
     container sid-label-tlv-support {
+      description
+        "Support of SID/Label sub-tlv.";
       presence "Support of the SID/Label sub-tlv.";
     }
+
     container sid-lable-binding-tlv-support {
+      description
+        "Support of SID/Label Binding tlv.";
       presence "Support of the SID/Label Binding tlv.";
-      leaf f-bit {
-        type boolean;
-        default false;
-      }
-      leaf m-bit {
-        type boolean;
-        default false;
-      }
-      leaf s-bit {
-        type boolean;
-        default false;
-      }
-      leaf d-bit {
-        type boolean;
-        default false;
-      }
-      leaf a-bit {
-        type boolean;
-        default false;
-      }
+      uses sid-label-binding-tlv-flags;
     }
+
     container mt-sid-label-binding-tlv-support {
+      description
+        "Support of Multi-Topology SID/Label Binding TLV.";
       presence "Support of the Multi-Topology SID/Label Binding tlv.";
-      leaf f-bit {
-        type boolean;
-        default false;
-      }
-      leaf m-bit {
-        type boolean;
-        default false;
-      }
-      leaf s-bit {
-        type boolean;
-        default false;
-      }
-      leaf d-bit {
-        type boolean;
-        default false;
-      }
-      leaf a-bit {
-        type boolean;
-        default false;
+      uses sid-label-binding-tlv-flags;
+    }
+
+    container sr-algorith-tlv-support {
+      description
+        "Support of SR-Algorithm sub-tlv.";
+      presence "Support of SR-Algorithm sub-tlv.";
+      leaf-list algo-support {
+        type uint8;
+        description
+          "Supported algorithms.";
       }
     }
 

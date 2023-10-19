@@ -58,92 +58,6 @@ module ietf-isis-pics-8667 {
       "RFC XXXX: YANG Data Model for IS-IS PICS.";
   }
 
-  grouping adj-sid-flags {
-    description
-      "The grouping for adj-sid and lan-adj-sid sub-tlv flags
-       and weight.";
-
-    leaf f-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of address-Family flag.";
-    }
-    leaf b-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of Backup Flag.";
-    }
-    leaf v-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of Value flag.";
-    }
-    leaf l-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of Local flag.";
-    }
-    leaf s-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of Set flag.";
-    }
-    leaf p-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of Persistent flag.";
-    }
-    leaf weight-support {
-      type boolean;
-      default false;
-      description
-        "Support of the weight of the Adj-SID for the purpose
-         of load balancing.";
-    }
-  }
-
-  grouping sid-label-binding-tlv-flags {
-    description
-      "The grouping for sid/label binding tlv and multi-topology
-       sid/label binding tlv flags.";
-      leaf f-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Address-Family flag.";
-      }
-      leaf m-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Mirror Context Flag.";
-      }
-      leaf s-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of S-flag.";
-      }
-      leaf d-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of D-flag.";
-
-      }
-      leaf a-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of A-flag.";
-      }
-  }
   container isis-pics-8667 {
     when "/isis-pics:isis-pics/isis-pics:supported-isis-pics "
        + "= 'rfc-8667'" {
@@ -157,109 +71,63 @@ module ietf-isis-pics-8667 {
 
 
     container sr-capability-sub-tlv-support {
+      presence "Support of sr-capability sub-tlv.";
       description
         "Support of sr-capability sub-tlv.";
-      presence "Support of sr-capability sub-tlv.";
 
       leaf i-bit-support {
-        type boolean;
-        default false;
+        type isis-pics:support;
         description
           "support mpls-ipv4 capability.";
       }
       leaf v-bit-support {
-        type boolean;
-        default false;
+        type isis-pics:support;
         description
           "support mpls-ipv6 capability.";
       }
     }
-    container prefix-sid-sub-tlv-support {
+
+    leaf prefix-sid-sub-tlv-support {
+      type isis-pics:support;
       description
-        "Support of prefix-sid sub-tlv.";
-      presence "Support of prefix sid sub-tlv.";
-      leaf r-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Re-advertisement Flag.";
-      }
-      leaf n-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Node-SID Flag.";
-      }
-      leaf p-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of No-PHP Flag.";
-      }
-      leaf e-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Explicit NUll Flag.";
-      }
-      leaf v-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Value Flag.";
-      }
-      leaf l-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Local Flag.";
-      }
-      leaf-list supported-algorithms {
-        type uint8;
-        description
-          "The Segment Routing algorithms that this implementation
-           supports.";
-      }
+        "Support of prefix-sid sub-tlv.";      
     }
 
-    container adj-sid-sub-tlv-support {
+    leaf adj-sid-sub-tlv-support {
+      type isis-pics:support;
       description
         "Support of Adjacency Segment Identifier sub-tlv.";
-      presence "Support of adj-sid sub-tlv.";
-      uses adj-sid-flags;
     }
 
-    container lan-adj-sid-sub-tlv-support {
+    leaf lan-adj-sid-sub-tlv-support {
+      type isis-pics:support;
       description
         "Support of LAN adj-sid sub-tlv.";
-      presence "Support of LAN adjacency sid sub-tlv.";
-      uses adj-sid-flags;
     }
 
-    container sid-label-tlv-support {
+    leaf sid-label-tlv-support {
+      type isis-pics:support;
       description
         "Support of SID/Label sub-tlv.";
-      presence "Support of the SID/Label sub-tlv.";
     }
 
-    container sid-lable-binding-tlv-support {
+    leaf sid-label-binding-tlv-support {
+      type isis-pics:support;
       description
         "Support of SID/Label Binding tlv.";
-      presence "Support of the SID/Label Binding tlv.";
-      uses sid-label-binding-tlv-flags;
     }
 
-    container mt-sid-label-binding-tlv-support {
+    leaf mt-sid-label-binding-tlv-support {
+      type isis-pics:support;
       description
         "Support of Multi-Topology SID/Label Binding TLV.";
-      presence "Support of the Multi-Topology SID/Label Binding tlv.";
-      uses sid-label-binding-tlv-flags;
     }
 
-    container sr-algorith-tlv-support {
+    container sr-algorithm-tlv-support {
+      presence "Support of SR-Algorithm sub-tlv.";
       description
         "Support of SR-Algorithm sub-tlv.";
-      presence "Support of SR-Algorithm sub-tlv.";
+      
       leaf-list algo-support {
         type uint8;
         description
@@ -267,12 +135,37 @@ module ietf-isis-pics-8667 {
       }
     }
 
-    container sr-lb-tlv-support {
-      presence "Support of the SR Local Block sub-tlv.";
+    leaf sr-lb-tlv-support {
+      type isis-pics:support;
+      description
+       "Support of the SR Local Block sub-tlv.";
     }
 
-    container srms-preference-tlv-support {
-      presence "Support of the SRMS Preference sub-tlv.";
+    leaf srms-preference-tlv-support {
+      type isis-pics:support;
+      description
+       "Support of the SRMS Preference sub-tlv.";
     }
-  }  
+  }
+
+  augment "/isis-pics:isis-pics/isis-pics:isis-pics-mptlv" 
+  {
+    description
+      "Augment isis-pics-mptlv container with the TLVs defined
+       in RFC 8667.";
+
+    leaf sid-label-binding-support {
+      type isis-pics:support;
+      description
+        "MP-TLV support of Segment Identifier/Label Binding TLV
+        (type 149).";
+    }
+
+    leaf mt-sid-label-binding-support {
+      type isis-pics:support;
+      description
+        "MP-TLV support of Multi-Topology Segment Identifier/Label
+        Binding TLV(type 150).";
+    }
+  }
 }

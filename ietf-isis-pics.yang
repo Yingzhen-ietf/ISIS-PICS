@@ -58,6 +58,14 @@ module ietf-isis-pics {
       "RFC XXXX: YANG Data Model for IS-IS PICS.";
   }
 
+  typedef support {
+    type boolean;
+    default false;
+    description
+      "When set to True, it means a feature or definition is
+       supported/implemented.";
+  }
+
   container isis-pics {
     description
       "IS-IS Protocol Implementation Conformance Statement (PICS).";
@@ -68,6 +76,14 @@ module ietf-isis-pics {
       }
       description
         "List of supported isis pics.";
-    }  
+    }
+
+    container isis-pics-mptlv {
+      description
+        "IS-IS Protocol Implementation Conformance Statement (PICS)
+         for RFC xxxx: Multi-part TLVs in IS-IS. This container is
+         meant to be augmented by RFC PICS module where a TLV is
+         defined.";
+    } 
   }  
 }

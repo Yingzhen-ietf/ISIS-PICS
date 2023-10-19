@@ -125,10 +125,17 @@
         interfaces, such as CLI and programmatic APIs.
       </t>
 
-      <t>The YANG model defined in this document is used to query an IS-IS implementation
-     for the conformance for the protocol implementation. A Protocol
-     Implementation Conformance Statement (PICS) is defined in
-     <xref target="ISO10589"/>.</t>
+     <t>Operators may find it useful to know what aspects of a protocol
+   are implemented by a given node in their network. Historically this
+   information has been provided in a Protocol Implementation Conformance
+   Statement (PICS) which is available as an offline document. (An example
+   of PICS for IS-IS can be found in <xref target="ISO10589"/> Section 12.) However,
+   there is no reason why this information could not be provided via
+   YANG - which is what this document defines. This allows an operator
+   to query nodes in real time as to what protocol features are supported.
+   This in turn can assist with avoiding (or at least diagnosing)
+   interoperability problems and/or determing when a feature can be safely
+   deployed.</t>
 
 
       <t>
@@ -142,9 +149,6 @@
         document are to be interpreted as described in <xref target="RFC2119"/>
         <xref target="RFC8174"/>.</t>
       </section>
-    </section>
-    <section title="IS-IS PICS">
-      <t>TBD. why YANG for ISIS PICS? </t>
     </section>
 
     <section title="Tree Diagrams">
@@ -171,6 +175,9 @@
           query a node with IS-IS PICS status.</t>
         <t>The leaf-list of "isis-pics" lists all the supported PICS
           that defined in the iana-isis-pics module.</t>
+        <t>The container "isis-pics-mptlv" is a place holder and meant
+          to be augmented by individual RFC PICS module with multi-part
+          tlv support.</t>
       </section>
 
       <section title="IS-IS PICS YANG Module for RFC 8667">
@@ -202,7 +209,8 @@
       <artwork>
 module: ietf-isis-pics
   +--rw isis-pics
-     +--rw isis-pics*   identityref
+     +--rw supported-isis-pics*   identityref
+     +--rw isis-pics-mptlv
       </artwork>
     </section>
     <section title="ISIS PICS RFC8667 YANG Tree">
@@ -216,49 +224,22 @@ module: ietf-isis-pics
 module: ietf-isis-pics-8667
   +--rw isis-pics-8667
      +--rw sr-capability-sub-tlv-support!
-     |  +--rw i-bit-support?   boolean
-     |  +--rw v-bit-support?   boolean
-     +--rw prefix-sid-sub-tlv-support!
-     |  +--rw r-bit-support?          boolean
-     |  +--rw n-bit-support?          boolean
-     |  +--rw p-bit-support?          boolean
-     |  +--rw e-bit-support?          boolean
-     |  +--rw v-bit-support?          boolean
-     |  +--rw l-bit-support?          boolean
-     |  +--rw supported-algorithms*   uint8
-     +--rw adj-sid-sub-tlv-support!
-     |  +--rw f-bit-support?    boolean
-     |  +--rw b-bit-support?    boolean
-     |  +--rw v-bit-support?    boolean
-     |  +--rw l-bit-support?    boolean
-     |  +--rw s-bit-support?    boolean
-     |  +--rw p-bit-support?    boolean
-     |  +--rw weight-support?   boolean
-     +--rw lan-adj-sid-sub-tlv-support!
-     |  +--rw f-bit-support?    boolean
-     |  +--rw b-bit-support?    boolean
-     |  +--rw v-bit-support?    boolean
-     |  +--rw l-bit-support?    boolean
-     |  +--rw s-bit-support?    boolean
-     |  +--rw p-bit-support?    boolean
-     |  +--rw weight-support?   boolean
-     +--rw sid-label-tlv-support!
-     +--rw sid-lable-binding-tlv-support!
-     |  +--rw f-bit-support?   boolean
-     |  +--rw m-bit-support?   boolean
-     |  +--rw s-bit-support?   boolean
-     |  +--rw d-bit-support?   boolean
-     |  +--rw a-bit-support?   boolean
-     +--rw mt-sid-label-binding-tlv-support!
-     |  +--rw f-bit-support?   boolean
-     |  +--rw m-bit-support?   boolean
-     |  +--rw s-bit-support?   boolean
-     |  +--rw d-bit-support?   boolean
-     |  +--rw a-bit-support?   boolean
-     +--rw sr-algorith-tlv-support!
+     |  +--rw i-bit-support?   isis-pics:support
+     |  +--rw v-bit-support?   isis-pics:support
+     +--rw prefix-sid-sub-tlv-support?         isis-pics:support
+     +--rw adj-sid-sub-tlv-support?            isis-pics:support
+     +--rw lan-adj-sid-sub-tlv-support?        isis-pics:support
+     +--rw sid-label-tlv-support?              isis-pics:support
+     +--rw sid-label-binding-tlv-support?      isis-pics:support
+     +--rw mt-sid-label-binding-tlv-support?   isis-pics:support
+     +--rw sr-algorithm-tlv-support!
      |  +--rw algo-support*   uint8
-     +--rw sr-lb-tlv-support!
-     +--rw srms-preference-tlv-support!
+     +--rw sr-lb-tlv-support?                  isis-pics:support
+     +--rw srms-preference-tlv-support?        isis-pics:support
+
+  augment /isis-pics:isis-pics/isis-pics:isis-pics-mptlv:
+    +--rw sid-label-binding-support?      isis-pics:support
+    +--rw mt-sid-label-binding-support?   isis-pics:support
       </artwork>
     </section>
 
@@ -268,7 +249,7 @@ module: ietf-isis-pics-8667
   <section title="IS-IS PICS YANG Modules">
     <section title="IANA ISIS PICS YANG Module">
       <artwork><![CDATA[
-<CODE BEGINS> file "iana-isis-pics@2023-10-01.yang"
+<CODE BEGINS> file "iana-isis-pics@2023-10-18.yang"
 module iana-isis-pics {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:iana-isis-pics";
@@ -304,7 +285,7 @@ module iana-isis-pics {
      (https://www.rfc-editor.org/info/rfcXXXX); see the RFC itself
      for full legal notices.";
 
-  revision 2023-10-01 {
+  revision 2023-10-18 {
     description
       "Initial Version";
     reference
@@ -409,14 +390,14 @@ module ietf-isis-pics {
     </section>
     <section title="ISIS PICS RFC8667 Module">
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-isis-pics-8667@2023-10-01.yang"
-module ietf-isis-pics-8667 {
+<CODE BEGINS> file "ietf-isis-pics-8667@2023-10-18.yang"
+module ietf-isis-pics {
   yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics-8667";
-  prefix isis-pics-8667;
+  namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics";
+  prefix isis-pics;
 
-  import ietf-isis-pics {
-    prefix "isis-pics";
+  import iana-isis-pics {
+    prefix "iana-isis-pics";
   }
 
   organization
@@ -433,10 +414,10 @@ module ietf-isis-pics-8667 {
                <mailto:prz@juniper.net>";
 
   description
-    "ISIS Protocol Implementation Conformance Statement (PICS) is
-     defined in ISO 10589. The YANG module is used to query an IS-IS
-     implementation of RFC 8667 for the conformance of the protocol
-     implementation.
+    "The YANG module is used to query an IS-IS implementation
+     for the conformance for the protocol implementation. A Protocol
+     Implementation COnformance Statement (PICS) is defined in
+     ISO 10589.
 
      This YANG model conforms to the Network Management
      Datastore Architecture (NMDA) as described in RFC 8342.
@@ -470,222 +451,33 @@ module ietf-isis-pics-8667 {
       "RFC XXXX: YANG Data Model for IS-IS PICS.";
   }
 
-  grouping adj-sid-flags {
+  typedef support {
+    type boolean;
+    default false;
     description
-      "The grouping for adj-sid and lan-adj-sid sub-tlv flags
-       and weight.";
-
-    leaf f-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of address-Family flag.";
-    }
-    leaf b-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of Backup Flag.";
-    }
-    leaf v-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of Value flag.";
-    }
-    leaf l-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of Local flag.";
-    }
-    leaf s-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of Set flag.";
-    }
-    leaf p-bit-support {
-      type boolean;
-      default false;
-      description
-        "Support of Persistent flag.";
-    }
-    leaf weight-support {
-      type boolean;
-      default false;
-      description
-        "Support of the weight of the Adj-SID for the purpose
-         of load balancing.";
-    }
+      "When set to True, it means a feature or definition is
+       supported/implemented.";
   }
 
-  grouping sid-label-binding-tlv-flags {
+  container isis-pics {
     description
-      "The grouping for sid/label binding tlv and multi-topology
-       sid/label binding tlv flags.";
-      leaf f-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Address-Family flag.";
-      }
-      leaf m-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Mirror Context Flag.";
-      }
-      leaf s-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of S-flag.";
-      }
-      leaf d-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of D-flag.";
+      "IS-IS Protocol Implementation Conformance Statement (PICS).";
 
+    leaf-list supported-isis-pics {
+      type identityref {
+        base iana-isis-pics:isis-pic;
       }
-      leaf a-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of A-flag.";
-      }
-  }
-  container isis-pics-8667 {
-    when "/isis-pics:isis-pics/isis-pics:supported-isis-pics "
-       + "= 'rfc-8667'" {
       description
-        "This container only exists when rfc-8667 is present in
-         the ietf-isis-pics module.";
+        "List of supported isis pics.";
     }
-    description
-      "IS-IS Protocol Implementation Conformance Statement (PICS)
-       for RFC 8667: IS-IS Extensions for Segment Routing.";
 
-
-    container sr-capability-sub-tlv-support {
+    container isis-pics-mptlv {
       description
-        "Support of sr-capability sub-tlv.";
-      presence "Support of sr-capability sub-tlv.";
-
-      leaf i-bit-support {
-        type boolean;
-        default false;
-        description
-          "support mpls-ipv4 capability.";
-      }
-      leaf v-bit-support {
-        type boolean;
-        default false;
-        description
-          "support mpls-ipv6 capability.";
-      }
-    }
-    container prefix-sid-sub-tlv-support {
-      description
-        "Support of prefix-sid sub-tlv.";
-      presence "Support of prefix sid sub-tlv.";
-      leaf r-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Re-advertisement Flag.";
-      }
-      leaf n-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Node-SID Flag.";
-      }
-      leaf p-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of No-PHP Flag.";
-      }
-      leaf e-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Explicit NUll Flag.";
-      }
-      leaf v-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Value Flag.";
-      }
-      leaf l-bit-support {
-        type boolean;
-        default false;
-        description
-          "Support of Local Flag.";
-      }
-      leaf-list supported-algorithms {
-        type uint8;
-        description
-          "The Segment Routing algorithms that this implementation
-           supports.";
-      }
-    }
-
-    container adj-sid-sub-tlv-support {
-      description
-        "Support of Adjacency Segment Identifier sub-tlv.";
-      presence "Support of adj-sid sub-tlv.";
-      uses adj-sid-flags;
-    }
-
-    container lan-adj-sid-sub-tlv-support {
-      description
-        "Support of LAN adj-sid sub-tlv.";
-      presence "Support of LAN adjacency sid sub-tlv.";
-      uses adj-sid-flags;
-    }
-
-    container sid-label-tlv-support {
-      description
-        "Support of SID/Label sub-tlv.";
-      presence "Support of the SID/Label sub-tlv.";
-    }
-
-    container sid-lable-binding-tlv-support {
-      description
-        "Support of SID/Label Binding tlv.";
-      presence "Support of the SID/Label Binding tlv.";
-      uses sid-label-binding-tlv-flags;
-    }
-
-    container mt-sid-label-binding-tlv-support {
-      description
-        "Support of Multi-Topology SID/Label Binding TLV.";
-      presence "Support of the Multi-Topology SID/Label Binding tlv.";
-      uses sid-label-binding-tlv-flags;
-    }
-
-    container sr-algorith-tlv-support {
-      description
-        "Support of SR-Algorithm sub-tlv.";
-      presence "Support of SR-Algorithm sub-tlv.";
-      leaf-list algo-support {
-        type uint8;
-        description
-          "Supported algorithms.";
-      }
-    }
-
-    container sr-lb-tlv-support {
-      presence "Support of the SR Local Block sub-tlv.";
-    }
-
-    container srms-preference-tlv-support {
-      presence "Support of the SRMS Preference sub-tlv.";
-    }
+        "IS-IS Protocol Implementation Conformance Statement (PICS)
+         for RFC xxxx: Multi-part TLVs in IS-IS. This container is
+         meant to be augmented by RFC PICS module where a TLV is
+         defined.";
+    } 
   }  
 }
 <CODE ENDS>
@@ -840,515 +632,5 @@ module ietf-isis-pics-8667 {
       <!-- Here we use entities that we defined at the beginning. -->
       &RFC8340;
     </references>
-    <section>
-      <name>Example: PICS for Multi-part TLVs in IS-IS</name>
-      <t>This section uses draft-pkaneria-lsr-multi-tlv as an example
-        to show what a document needs to include for PICS.</t>
-      <t>
-        This section includes a YANG module to query PICS for
-        draft-pkaneria-lsr-multi-tlv, which defines the common mechanism of
-        extending the TLV content space through multiple TLVs. </t>
-      <artwork><![CDATA[
-module ietf-isis-pics-mtlv {
-  yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics-mtlv";
-  prefix isis-pics-mtlv;
-
-  import ietf-isis-pics {
-    prefix "isis-pics";
-  }
-
-  organization
-    "IETF LSR - Link State Routing Working Group";
-  contact
-    "WG Web:   <http://datatracker.ietf.org/wg/lsr>
-     WG List:  <mailto:lsr@ietf.org>
-
-     Author:    Yingzhen Qu
-               <mailto:yingzhen.ietf@gmail.com>
-     Author:   Les Ginsberg
-               <mailto:ginsberg@cisco.com>
-     Author:   Tony Przygienda
-               <mailto:prz@juniper.net>";
-
-  description
-    "ISIS Protocol Implementation Conformance Statement (PICS) is
-     defined in ISO 10589. The YANG module is used to query an IS-IS
-     implementation of Multi-part TLVs for the conformance of the
-     protocol implementation.
-
-     This YANG model conforms to the Network Management
-     Datastore Architecture (NMDA) as described in RFC 8342.
-
-     Copyright (c) 2023 IETF Trust and the persons identified as
-     authors of the code.  All rights reserved.
-
-     Redistribution and use in source and binary forms, with or
-     without modification, is permitted pursuant to, and subject to
-     the license terms contained in, the Revised BSD License set
-     forth in Section 4.c of the IETF Trust's Legal Provisions
-     Relating to IETF Documents
-     (https://trustee.ietf.org/license-info).
-
-     This version of this YANG module is part of RFC XXXX
-     (https://www.rfc-editor.org/info/rfcXXXX); see the RFC itself
-     for full legal notices.
-
-     The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
-     NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'NOT RECOMMENDED',
-     'MAY', and 'OPTIONAL' in this document are to be interpreted as
-     described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
-     they appear in all capitals, as shown here.";
-
-  revision 2023-10-01 {
-    description
-      "Initial Version";
-  }
-
-  container isis-pics-mtlv {
-    when "/isis-pics:isis-pics/isis-pics:supported-isis-pics "
-       + "= 'rfc-mtlv'" {
-      description
-        "This container only exists when rfc-mtlv is present in
-         the ietf-isis-pics module.";
-    }
-    description
-      "IS-IS Protocol Implementation Conformance Statement (PICS)
-       for RFC xxxx: Multi-part TLVs in IS-IS";
-
-
-    container mp-top-tlv-support {
-      description
-        "Support of MP-TLV for isis top-level tlvs.";
-
-      leaf inst-id-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Instance Identifier TLV(type 7).";
-      }
-      leaf extended-is-reachability-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Extended IS Reachability TLV(type 22).";
-      }
-      leaf is-nbr-attr-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of IS Neighbor Attribute TLV(type 23).";
-      }
-      leaf l2-bundle-mbr-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of L2 Bundle Member Attributes TLV(type 25).";
-      }
-      leaf srv6-locator-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of SRv6 Locator TLV(type 27).";
-      }
-      leaf extended-ip-reachability-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Extended IP Reachability TLV(type 135).";
-      }
-      leaf gmpls-srlb-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of GMPLS-SRLG TLV(type 138).";
-      }
-      leaf inter-as-reachability-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of inter-AS reachability information TLV
-           (type 141).";
-      }
-      leaf gaadr-tlv-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV Group Address TLV(type 142).";
-      }
-      leaf mt-port-cap-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of MT-Port-Cap TLV(type 143).";
-      }
-      leaf mt-capability-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of MT-Capability TLV(type 144).";
-      }
-      leaf mac-ri-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of MAC-RI TLV(type 147).";
-      }
-      leaf bfd-enabled-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of BFD-Enabled TLV(type 148).";
-      }
-      leaf sid-label-binding-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Segment Identifier/Label Binding TLV
-          (type 149).";
-      }
-      leaf mt-sid-label-binding-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Multi-Topology Segment Identifier/Label
-          Binding TLV(type 150).";
-      }
-      leaf mt-isn-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of MT-ISN TLV(type 222).";
-      }
-      leaf mt-is-nbr-attr-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of MT IS Neighbor Attribute TLV(type 223).";
-      }
-      leaf mt-ip-reach-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of MT IP Reachable TLV(type 235).";
-      }
-      leaf ipv6-ip-reach-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of IPv6 IP Reach TLV(type 236).";
-      }
-      leaf mt-ipv6-ip-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of MT IPv6 IP Reach TLV(type 237).";
-      }
-      leaf app-specific-srlg-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Application-Specific SRLG TLV(type 238).";
-      }
-      leaf router-capability-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of IS-IS Router Capability TLV(type 242).";
-      }
-      leaf generic-info-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Generic Information TLV(type 251).";
-      }
-    }
-
-    container mp-sub-tlv-nbr-info-support {
-      description
-        "Support of MP-TLV for IS-IS sub-tlvs for advertising
-         neighbor information.";
-      leaf link-msd-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Link MSD Sub-TLV(type 15).";
-      }
-      leaf app-spec-link-attr-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Application-Specific Link Attributes 
-          Sub-TLV(type 16).";
-      }
-      leaf generic-metric-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Generic Metric Sub-TLV(type 17).";
-      }
-      leaf int-switch-capability-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Interface Switching Capability Descriptor
-           Sub-TLV(type 21).";
-      }
-      leaf iacd-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Interface Adjustment Capability Descriptor
-           Sub-TLV(type 27).";
-      }
-      leaf spb-a-oalg-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of SPB-A-OALG Sub-TLV(type 30).";
-      }
-      leaf l2-bundle-adj-sid-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of L2 Bundle Member Adj-SID Sub-TLV
-           (type 41).";
-      }
-      leaf l2-bundle-lan-adj-sid-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of L2 Bundle Member LAN Adj-SID Sub-TLV
-           (type 42).";
-      }
-      leaf srv6-endx-sid-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of SRv6 Eend.X SID Sub-TLV(type 43).";
-      }
-      leaf srv6-lan-endx-sid-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of SRv6 LAN End.X SID Sub-TLV(type 44).";
-      }
-    }
-
-    container mp-sub-tlv-prefix-reachability-support {
-      description
-        "Support of MP-TLV for IS-IS sub-tlvs for advertising
-         prefix reachability.";
-      leaf srv6-end-sid-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of SRv6 End SID Sub-TLV(type 5).";
-      }
-      leaf bier-info-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of BIER Info Sub-TLV(type 32).";
-      }
-    }
-
-    container mp-sub-tlv-mt-capability-support {
-      description
-        "Support of MP-TLV for IS-IS sub-tlvs for MT-Capability.";
-      leaf spb-i-oalg-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of SPB-I-OALG Sub-TLV(type 2).";
-      }
-      leaf spbm-si-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of SPBM-SI Sub-TLV(type 3).";
-      }
-      leaf spbv-addr-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of SPBV-ADDR Sub-TLV(type 4).";
-      }
-      leaf nickname-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of NICKNAME Sub-TLV(type 6).";
-      }
-      leaf tree-rt-id-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of TREE-RT-IDs Sub-TLV(type 8).";
-      }
-      leaf tree-use-id-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of TREE-USE-IDs Sub-TLV(type 9).";
-      }
-      leaf int-vlan-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of INT-VLAN Sub-TLV(type 10).";
-      }
-      leaf vlan-group-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of VLAN-GROUP Sub-TLV(type 14).";
-      }
-      leaf int-label-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of SPBM-SI Sub-TLV(type 15).";
-      }
-      leaf rbchannels-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of RBCHANNELS Sub-TLV(type 16).";
-      }
-      leaf affinity-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of AFFINITY Sub-TLV(type 17).";
-      }
-      leaf label-group-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of LABEL-GROUP Sub-TLV(type 18).";
-      }
-      leaf topo-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of TOpology Sub-TLV(type 21).";
-      }
-    }
-
-    container mp-sub-tlv-router-capability-support {
-      description
-        "Support of MP-TLV for IS-IS sub-tlvs for IS-IS
-         Router Capability.";
-      leaf te-mesh-ipv4-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of TE-MESH_GROUP IPv4 Sub-TLV(type 3).";
-      }
-      leaf te-mesh-ip6-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of TE-MESH-GROUP IPv6 Sub-TLV(type 4).";
-      }
-      leaf nickname-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of NICKNAME Sub-TLV(type 6).";
-      }
-      leaf tree-rt-id-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of TREE-RT-IDs Sub-TLV(type 8).";
-      }
-      leaf tree-use-id-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of TREE-USE-IDs Sub-TLV(type 9).";
-      }
-      leaf int-vlan-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of INT-VLAN Sub-TLV(type 10).";
-      }
-      leaf vlan-group-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of VLAN-GROUP Sub-TLV(type 14).";
-      }
-      leaf int-label-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of SPBM-SI Sub-TLV(type 15).";
-      }
-      leaf rbchannels-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of RBCHANNELS Sub-TLV(type 16).";
-      }
-      leaf affinity-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of AFFINITY Sub-TLV(type 17).";
-      }
-      leaf label-group-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of LABEL-GROUP Sub-TLV(type 18).";
-      }
-      leaf node-msd-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Node MSD Sub-TLV(type 23).";
-      }
-      leaf flood-reflect-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Flood Reflection Discovery Sub-TLV
-          (type 161).";
-      }
-    }
-
-    container mp-sub-sub-tlv-app-specific-link-attr-support {
-      description
-        "Support of MP-TLV for IS-IS sub-sub-tlvs for Application
-         Specific Link Attributes.";
-      leaf generic-metric-support {
-        type boolean;
-        default false;
-        description
-          "MP-TLV support of Generic Metric sub-sub-TLV(type 17).";
-      }
-    }   
-  }  
-}
-      ]]></artwork>
-    <t>The following information should be included in the "IANA Consideration":</t>
-   <t>A new entry, "rfc-mtlv", should be added to the "IS-IS PICS" registry. This
-    will add a new identity "rfc-mtlv" in the iana-isis-pics.yang.</t>
-   <artwork>
-   URI: urn:ietf:params:xml:ns:yang:ietf-isis-pics-mtlv
-   Registrant Contact: IANA.
-   XML: N/A, the requested URI is an XML namespace.
-   </artwork> 
-   <artwork>
-   name: ietf-isis-pics-mtlv
-   namespace: urn:ietf:params:xml:ns:yang:ietf-isis-pics-mtlv
-   prefix: isis-pics-mtlv
-   reference: RFC XXXX
-   </artwork>   
-    </section>
   </back>
 </rfc>

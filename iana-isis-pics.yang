@@ -33,7 +33,7 @@ module iana-isis-pics {
      (https://www.rfc-editor.org/info/rfcXXXX); see the RFC itself
      for full legal notices.";
 
-  revision 2023-10-01 {
+  revision 2023-10-18 {
     description
       "Initial Version";
     reference
@@ -48,8 +48,10 @@ module iana-isis-pics {
   }
 
   identity rfc-8667 {
-    base isis-pic;
+    base "isis-pic";
+    description
+      "The identity for suppor of RFC 8667 PICS.";
     reference
-      "RFC 8667P: IS-IS Extensions for Segment Routing.";
+      "RFC 8667: IS-IS Extensions for Segment Routing.";
   }
 }

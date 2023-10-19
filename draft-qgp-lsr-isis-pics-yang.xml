@@ -300,9 +300,11 @@ module iana-isis-pics {
   }
 
   identity rfc-8667 {
-    base isis-pic;
+    base "isis-pic";
+    description
+      "The identity for suppor of RFC 8667 PICS.";
     reference
-      "RFC 8667P: IS-IS Extensions for Segment Routing.";
+      "RFC 8667: IS-IS Extensions for Segment Routing.";
   }
 }
 <CODE ENDS>
@@ -310,7 +312,7 @@ module iana-isis-pics {
     </section>
     <section title="ISIS PICS Module">
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-isis-pics@2023-10-01.yang"
+<CODE BEGINS> file "ietf-isis-pics@2023-10-18.yang"
 module ietf-isis-pics {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics";
@@ -364,87 +366,7 @@ module ietf-isis-pics {
   reference
     "RFC XXXX: YANG Data Model for IS-IS PICS";
 
-  revision 2023-10-01 {
-    description
-      "Initial Version";
-    reference
-      "RFC XXXX: YANG Data Model for IS-IS PICS.";
-  }
-
-  container isis-pics {
-    description
-      "IS-IS Protocol Implementation Conformance Statement (PICS).";
-
-    leaf-list supported-isis-pics {
-      type identityref {
-        base iana-isis-pics:isis-pic;
-      }
-      description
-        "List of supported isis pics.";
-    }  
-  }  
-}
-
-<CODE ENDS>
-      ]]></artwork>
-    </section>
-    <section title="ISIS PICS RFC8667 Module">
-      <artwork><![CDATA[
-<CODE BEGINS> file "ietf-isis-pics-8667@2023-10-18.yang"
-module ietf-isis-pics {
-  yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics";
-  prefix isis-pics;
-
-  import iana-isis-pics {
-    prefix "iana-isis-pics";
-  }
-
-  organization
-    "IETF LSR - Link State Routing Working Group";
-  contact
-    "WG Web:   <http://datatracker.ietf.org/wg/lsr>
-     WG List:  <mailto:lsr@ietf.org>
-
-     Author:    Yingzhen Qu
-               <mailto:yingzhen.ietf@gmail.com>
-     Author:   Les Ginsberg
-               <mailto:ginsberg@cisco.com>
-     Author:   Tony Przygienda
-               <mailto:prz@juniper.net>";
-
-  description
-    "The YANG module is used to query an IS-IS implementation
-     for the conformance for the protocol implementation. A Protocol
-     Implementation COnformance Statement (PICS) is defined in
-     ISO 10589.
-
-     This YANG model conforms to the Network Management
-     Datastore Architecture (NMDA) as described in RFC 8342.
-
-     Copyright (c) 2023 IETF Trust and the persons identified as
-     authors of the code.  All rights reserved.
-
-     Redistribution and use in source and binary forms, with or
-     without modification, is permitted pursuant to, and subject to
-     the license terms contained in, the Revised BSD License set
-     forth in Section 4.c of the IETF Trust's Legal Provisions
-     Relating to IETF Documents
-     (https://trustee.ietf.org/license-info).
-
-     This version of this YANG module is part of RFC XXXX
-     (https://www.rfc-editor.org/info/rfcXXXX); see the RFC itself
-     for full legal notices.
-
-     The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
-     NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'NOT RECOMMENDED',
-     'MAY', and 'OPTIONAL' in this document are to be interpreted as
-     described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
-     they appear in all capitals, as shown here.";
-  reference
-    "RFC XXXX: YANG Data Model for IS-IS PICS";
-
-  revision 2023-10-01 {
+  revision 2023-10-18 {
     description
       "Initial Version";
     reference
@@ -453,7 +375,7 @@ module ietf-isis-pics {
 
   typedef support {
     type boolean;
-    default false;
+    default "false";
     description
       "When set to True, it means a feature or definition is
        supported/implemented.";
@@ -479,6 +401,187 @@ module ietf-isis-pics {
          defined.";
     } 
   }  
+}
+<CODE ENDS>
+      ]]></artwork>
+    </section>
+    <section title="ISIS PICS RFC8667 Module">
+      <artwork><![CDATA[
+<CODE BEGINS> file "ietf-isis-pics-8667@2023-10-18.yang"
+module ietf-isis-pics-8667 {
+  yang-version 1.1;
+  namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics-8667";
+  prefix isis-pics-8667;
+
+  import iana-isis-pics {
+    prefix "iana-isis-pics";
+  }
+  
+  import ietf-isis-pics {
+    prefix "isis-pics";
+  }
+
+  organization
+    "IETF LSR - Link State Routing Working Group";
+  contact
+    "WG Web:   <http://datatracker.ietf.org/wg/lsr>
+     WG List:  <mailto:lsr@ietf.org>
+
+     Author:    Yingzhen Qu
+               <mailto:yingzhen.ietf@gmail.com>
+     Author:   Les Ginsberg
+               <mailto:ginsberg@cisco.com>
+     Author:   Tony Przygienda
+               <mailto:prz@juniper.net>";
+
+  description
+    "ISIS Protocol Implementation Conformance Statement (PICS) is
+     defined in ISO 10589. The YANG module is used to query an IS-IS
+     implementation of RFC 8667 for the conformance of the protocol
+     implementation.
+
+     This YANG model conforms to the Network Management
+     Datastore Architecture (NMDA) as described in RFC 8342.
+
+     Copyright (c) 2023 IETF Trust and the persons identified as
+     authors of the code.  All rights reserved.
+
+     Redistribution and use in source and binary forms, with or
+     without modification, is permitted pursuant to, and subject to
+     the license terms contained in, the Revised BSD License set
+     forth in Section 4.c of the IETF Trust's Legal Provisions
+     Relating to IETF Documents
+     (https://trustee.ietf.org/license-info).
+
+     This version of this YANG module is part of RFC XXXX
+     (https://www.rfc-editor.org/info/rfcXXXX); see the RFC itself
+     for full legal notices.
+
+     The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
+     NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'NOT RECOMMENDED',
+     'MAY', and 'OPTIONAL' in this document are to be interpreted as
+     described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
+     they appear in all capitals, as shown here.";
+  reference
+    "RFC XXXX: YANG Data Model for IS-IS PICS";
+
+  revision 2023-10-18 {
+    description
+      "Initial Version";
+    reference
+      "RFC XXXX: YANG Data Model for IS-IS PICS.";
+  }
+
+  container isis-pics-8667 {
+    when "/isis-pics:isis-pics/isis-pics:supported-isis-pics "
+       + "= 'iana-isis-pics:rfc-8667'" {
+      description
+        "This container only exists when rfc-8667 is present in
+         the ietf-isis-pics module.";
+    }
+    description
+      "IS-IS Protocol Implementation Conformance Statement (PICS)
+       for RFC 8667: IS-IS Extensions for Segment Routing.";
+
+
+    container sr-capability-sub-tlv-support {
+      presence "Support of sr-capability sub-tlv.";
+      description
+        "Support of sr-capability sub-tlv.";
+
+      leaf i-bit-support {
+        type isis-pics:support;
+        description
+          "support mpls-ipv4 capability.";
+      }
+      leaf v-bit-support {
+        type isis-pics:support;
+        description
+          "support mpls-ipv6 capability.";
+      }
+    }
+
+    leaf prefix-sid-sub-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of prefix-sid sub-tlv.";      
+    }
+
+    leaf adj-sid-sub-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of Adjacency Segment Identifier sub-tlv.";
+    }
+
+    leaf lan-adj-sid-sub-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of LAN adj-sid sub-tlv.";
+    }
+
+    leaf sid-label-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of SID/Label sub-tlv.";
+    }
+
+    leaf sid-label-binding-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of SID/Label Binding tlv.";
+    }
+
+    leaf mt-sid-label-binding-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of Multi-Topology SID/Label Binding TLV.";
+    }
+
+    container sr-algorithm-tlv-support {
+      presence "Support of SR-Algorithm sub-tlv.";
+      description
+        "Support of SR-Algorithm sub-tlv.";
+      
+      leaf-list algo-support {
+        type uint8;
+        description
+          "Supported algorithms.";
+      }
+    }
+
+    leaf sr-lb-tlv-support {
+      type isis-pics:support;
+      description
+       "Support of the SR Local Block sub-tlv.";
+    }
+
+    leaf srms-preference-tlv-support {
+      type isis-pics:support;
+      description
+       "Support of the SRMS Preference sub-tlv.";
+    }
+  }
+
+  augment "/isis-pics:isis-pics/isis-pics:isis-pics-mptlv" 
+  {
+    description
+      "Augment isis-pics-mptlv container with the TLVs defined
+       in RFC 8667.";
+
+    leaf sid-label-binding-support {
+      type isis-pics:support;
+      description
+        "MP-TLV support of Segment Identifier/Label Binding TLV
+        (type 149).";
+    }
+
+    leaf mt-sid-label-binding-support {
+      type isis-pics:support;
+      description
+        "MP-TLV support of Multi-Topology Segment Identifier/Label
+        Binding TLV(type 150).";
+    }
+  }
 }
 <CODE ENDS>
       ]]></artwork>

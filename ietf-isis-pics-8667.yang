@@ -3,6 +3,10 @@ module ietf-isis-pics-8667 {
   namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics-8667";
   prefix isis-pics-8667;
 
+  import iana-isis-pics {
+    prefix "iana-isis-pics";
+  }
+  
   import ietf-isis-pics {
     prefix "isis-pics";
   }
@@ -51,7 +55,7 @@ module ietf-isis-pics-8667 {
   reference
     "RFC XXXX: YANG Data Model for IS-IS PICS";
 
-  revision 2023-10-01 {
+  revision 2023-10-18 {
     description
       "Initial Version";
     reference
@@ -60,7 +64,7 @@ module ietf-isis-pics-8667 {
 
   container isis-pics-8667 {
     when "/isis-pics:isis-pics/isis-pics:supported-isis-pics "
-       + "= 'rfc-8667'" {
+       + "= 'iana-isis-pics:rfc-8667'" {
       description
         "This container only exists when rfc-8667 is present in
          the ietf-isis-pics module.";

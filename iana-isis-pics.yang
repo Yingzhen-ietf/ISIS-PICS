@@ -41,14 +41,14 @@ module iana-isis-pics {
   }
 
 
-  identity isis-pic {
+  identity isis-pics {
     description
       "This identity is used as a base for all ISIS pics defined
-       in the 'IS-IS PICs' registry.";
+       in the 'IS-IS PICS' registry.";
   }
 
-  identity rfc-8667 {
-    base "isis-pic";
+  identity isis-pics-sr-mpls {
+    base "isis-pics";
     description
       "The identity for suppor of RFC 8667 PICS.";
     reference

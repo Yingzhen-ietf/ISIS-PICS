@@ -72,7 +72,7 @@ module ietf-isis-pics {
 
     leaf-list supported-isis-pics {
       type identityref {
-        base iana-isis-pics:isis-pic;
+        base iana-isis-pics:isis-pics;
       }
       description
         "List of supported isis pics.";

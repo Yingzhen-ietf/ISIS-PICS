@@ -303,7 +303,7 @@ module iana-isis-pics {
   identity isis-pics-sr-mpls {
     base "isis-pics";
     description
-      "The identity for suppor of SR MPLS.";
+      "The identity for support of SR MPLS.";
     reference
       "RFC 8667: IS-IS Extensions for Segment Routing.";
   }

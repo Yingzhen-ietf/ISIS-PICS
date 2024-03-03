@@ -26,6 +26,10 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8342.xml'>
     <!ENTITY RFC8446 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml'>
+    <!ENTITY RFC8667 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8667.xml'>
+    <!ENTITY I-D.qgp-lsr-isis-pics-yang PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-qgp-lsr-isis-pics-yang-00.xml'>
     ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc strict="no" ?>
@@ -36,7 +40,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-qgp-lsr-isis-pics-yang-01" ipr="trust200902"
+<rfc category="std" docName="draft-qgp-lsr-isis-pics-srmpls-yang-00" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -49,7 +53,7 @@
     <!-- The abbreviated title is used in the page header - it is only necessary if the
          full title is longer than 39 characters -->
 
-  <title abbrev="IS-IS PICS YANG">YANG Model for IS-IS Protocol Implementation Conformance Statement (PICS) </title>
+  <title abbrev="IS-IS PICS SR-MPLS YANG">YANG Model for IS-IS Segment Routing MPLS PICS</title>
 
     <!-- add 'role="editor"' below for the editors if appropriate -->
 
@@ -104,8 +108,7 @@
 
     <abstract>
       <t>
-        The YANG model in this document is to be used
-        to query an IS-IS Protocol Implementation Conformance Statement (PICS).
+        The YANG model in this document is to query an IS-IS Protocol Implementation Conformance Statement (PICS) of Segment Routing on MPLS data plane.
       </t>
     </abstract>
   </front>
@@ -123,18 +126,11 @@
         interfaces, such as CLI and programmatic APIs.
       </t>
 
-     <t>Operators may find it useful to know what aspects of a protocol
-   are implemented by a given node in their network. Historically this
-   information has been provided in a Protocol Implementation Conformance
-   Statement (PICS) which is available as an offline document. (An example
-   of PICS for IS-IS can be found in <xref target="ISO10589"/> Section 12.) However,
-   there is no reason why this information could not be provided via
-   YANG - which is what this document defines. This allows an operator
-   to query nodes in real time as to what protocol features are supported.
-   This in turn can assist with avoiding (or at least diagnosing)
-   interoperability problems and/or determining when a feature can be safely
-   deployed.</t>
-
+     <t>
+      <xref target="I-D.qgp-lsr-isis-pics-yang"/> defines the framework to query 
+      IS-IS Protocol Implementation Conformance Statement (PICS). The module
+      defined in this document is used to query an IS-IS PICS of Segment
+      Routing on MPLS data plane <xref target="RFC8667"/>.</t>
 
       <t>
         The YANG modules in this document conform to the Network Management
@@ -149,122 +145,72 @@
       </section>
     </section>
 
-    <section title="Tree Diagrams">
+
+
+    <section title="Design of the Model">
+
+        <t>
+          The YANG module is used to query an IS-IS implementation of
+          Segment Routing on MPLS data plane
+          <xref target="RFC8667"/> for the conformance of the protocol
+          implementation.
+        </t>
+        <t>
+          Container "isis-pics-sr-mpls" only exists when "isis-pics-sr-mpls" is included
+          in the list of "supported-isis-pics" in ietf-isis-pics module.
+        </t>
+        <t>
+          The existence of a TLV support container means the support of
+          a TLV. The details of the flags and features are included in the
+          container.
+        </t>
+
+    </section>
+
+    <section title="ISIS PICS for SR MPLS Tree">
       <t>
         This document uses the graphical representation of data models
         defined in <xref target="RFC8340"/>.
       </t>
-    </section>
+            <artwork>
+module: ietf-isis-pics-sr-mpls
+  +--ro isis-pics-sr-mpls
+     +--ro sr-capability-sub-tlv-support!
+     |  +--ro i-bit-support?   isis-pics:support
+     |  +--ro v-bit-support?   isis-pics:support
+     +--ro prefix-sid-sub-tlv-support?         isis-pics:support
+     +--ro adj-sid-sub-tlv-support?            isis-pics:support
+     +--ro lan-adj-sid-sub-tlv-support?        isis-pics:support
+     +--ro sid-label-tlv-support?              isis-pics:support
+     +--ro sid-label-binding-tlv-support?      isis-pics:support
+     +--ro mt-sid-label-binding-tlv-support?   isis-pics:support
+     +--ro sr-algorithm-tlv-support!
+     |  +--ro algo-support*   uint8
+     +--ro sr-lb-tlv-support?                  isis-pics:support
+     +--ro srms-preference-tlv-support?        isis-pics:support
 
-    <section title="Design of the Model">
-      <section title="IANA IS-IS PICS YANG Module">
-        <t>A new IANA registry will be created for IS-IS PICS, which maintains
-          the list of RFCs that support IS-IS PICS.</t>
-
-        <t>Module iana-isis-pics.yang is the initial version for IS-IS
-          PICS identity type definitions.
-        </t>
-        <t>When a new identity is added to the "IS-IS PICS" registry,
-          the iana-isis-pics YANG module is updated by IANA.
-        </t>
-      </section>
-      <section title="IS-IS PICS YANG Module">
-        <t>Module ietf-isis-pics.yang is a device model and designed to
-          query a node with IS-IS PICS status.</t>
-        <t>The leaf-list of "isis-pics" lists all the supported PICS
-          that defined in the iana-isis-pics module.</t>
-        <t>The container "isis-pics-mptlv" is a place holder and meant
-          to be augmented by individual RFC PICS module with multi-part
-          tlv support.</t>
-      </section>
-
-    </section>
-
-  <section title="IS-IS PICS YANG Trees">
-    <section title="IETF ISIS PICS YANG Tree">
-    <t>
-      The following figure shows the tree diagram of the ietf-isis-pics
-      module.
-    </t>
-
-      <artwork>
-module: ietf-isis-pics
-  +--ro isis-pics
-     +--ro supported-isis-pics*   identityref
-     +--ro isis-pics-mptlv
+  augment /isis-pics:isis-pics/isis-pics:isis-pics-mptlv:
+    +--ro sid-label-binding-support?      isis-pics:support
+    +--ro mt-sid-label-binding-support?   isis-pics:support
       </artwork>
     </section>
 
-  </section>
 
+  <section title="IS-IS PICS SR-MPLS YANG Modules">
 
-  <section title="IS-IS PICS YANG Modules">
-    <section title="IANA ISIS PICS YANG Module">
       <artwork><![CDATA[
-<CODE BEGINS> file "iana-isis-pics@2024-03-03.yang"
-module iana-isis-pics {
+<CODE BEGINS> file "ietf-isis-pics-sr-mpls@2024-03-03.yang"
+module ietf-isis-pics-sr-mpls {
   yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:iana-isis-pics";
-  prefix iana-isis-pics;
-
-  organization
-    "IANA";
-  contact
-    "Internet Assigned Numbers Authority
-
-     Postal: ICANN
-             12025 Waterfront Drive, Suite 300
-             Los Angeles, CA 90094-2536
-             United States of America
-     Tel:    +1 310 301 5800
-     <mailto:iana@iana.org>";
-
-  description
-    "The YANG module defines the identities for IS-IS Protocol
-     Implementation Conformance Statement (PICS).
-
-     Copyright (c) 2024 IETF Trust and the persons identified as
-     authors of the code.  All rights reserved.
-
-     Redistribution and use in source and binary forms, with or
-     without modification, is permitted pursuant to, and subject to
-     the license terms contained in, the Revised BSD License set
-     forth in Section 4.c of the IETF Trust's Legal Provisions
-     Relating to IETF Documents
-     (https://trustee.ietf.org/license-info).
-
-     This version of this YANG module is part of RFC XXXX
-     (https://www.rfc-editor.org/info/rfcXXXX); see the RFC itself
-     for full legal notices.";
-
-  revision 2024-03-03 {
-    description
-      "Initial Version";
-    reference
-      "RFC XXXX: YANG Data Model for IS-IS PICS.";
-  }
-
-
-  identity isis-pics {
-    description
-      "This identity is used as a base for all ISIS pics defined
-       in the 'IS-IS PICS' registry.";
-  }
-
-}
-<CODE ENDS>
-      ]]></artwork>
-    </section>
-    <section title="ISIS PICS Module">
-      <artwork><![CDATA[
-<CODE BEGINS> file "ietf-isis-pics@2024-03-03.yang"
-module ietf-isis-pics {
-  yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics";
-  prefix isis-pics;
+  namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics-sr-mpls";
+  prefix isis-pics-sr-mpls;
 
   import iana-isis-pics {
     prefix "iana-isis-pics";
+  }
+
+  import ietf-isis-pics {
+    prefix "isis-pics";
   }
 
   organization
@@ -281,8 +227,9 @@ module ietf-isis-pics {
                <mailto:prz@juniper.net>";
 
   description
-    "The YANG module is used to query an IS-IS implementation
-     for Protocol Implementation Conformance Statement (PICS).
+    "The YANG module is used to query an IS-IS Protocol 
+     Implementation Conformance Statement (PICS) of Segment
+     Routing for MPLS data plane (RFC8667).
 
      This YANG model conforms to the Network Management
      Datastore Architecture (NMDA) as described in RFC 8342.
@@ -307,50 +254,133 @@ module ietf-isis-pics {
      described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
      they appear in all capitals, as shown here.";
   reference
-    "RFC XXXX: YANG Data Model for IS-IS PICS";
+    "RFC XXXX: YANG Data Model for IS-IS Segment Routing MPLS PICS";
 
   revision 2024-03-03 {
     description
       "Initial Version";
     reference
-      "RFC XXXX: YANG Data Model for IS-IS PICS.";
+      "RFC XXXX: YANG Data Model for IS-IS Segment Routing MPLS PICS.";
   }
 
-  typedef support {
-    type boolean;
-    default "false";
-    description
-      "When set to True, it means a feature or definition is
-       supported/implemented.";
-  }
-
-  container isis-pics {
+  container isis-pics-sr-mpls {
+    when "/isis-pics:isis-pics/isis-pics:supported-isis-pics "
+       + "= 'iana-isis-pics:isis-pics-sr-mpls'" {
+      description
+        "This container only exists when isis-pics-sr-mpls is present
+         in the ietf-isis-pics module.";
+    }
     config false;
     description
-      "IS-IS Protocol Implementation Conformance Statement (PICS).";
+      "IS-IS Protocol Implementation Conformance Statement (PICS) of
+       Segment Routing on MPLS data plane.";
+    reference
+       "RFC 8667: IS-IS Extensions for Segment Routing";
 
-    leaf-list supported-isis-pics {
-      type identityref {
-        base iana-isis-pics:isis-pics;
-      }
+
+    container sr-capability-sub-tlv-support {
+      presence "Support of sr-capability sub-tlv.";
       //config false;
       description
-        "List of supported isis pics.";
+        "Support of sr-capability sub-tlv.";
+
+      leaf i-bit-support {
+        type isis-pics:support;
+        description
+          "support mpls-ipv4 capability.";
+      }
+      leaf v-bit-support {
+        type isis-pics:support;
+        description
+          "support mpls-ipv6 capability.";
+      }
     }
 
-    container isis-pics-mptlv {
-
+    leaf prefix-sid-sub-tlv-support {
+      type isis-pics:support;
       description
-        "IS-IS Protocol Implementation Conformance Statement (PICS)
-         for RFC xxxx: Multi-part TLVs in IS-IS. This container is
-         meant to be augmented by RFC PICS module where a TLV is
-         defined.";
-    } 
-  }  
+        "Support of prefix-sid sub-tlv.";      
+    }
+
+    leaf adj-sid-sub-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of Adjacency Segment Identifier sub-tlv.";
+    }
+
+    leaf lan-adj-sid-sub-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of LAN adj-sid sub-tlv.";
+    }
+
+    leaf sid-label-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of SID/Label sub-tlv.";
+    }
+
+    leaf sid-label-binding-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of SID/Label Binding tlv.";
+    }
+
+    leaf mt-sid-label-binding-tlv-support {
+      type isis-pics:support;
+      description
+        "Support of Multi-Topology SID/Label Binding TLV.";
+    }
+
+    container sr-algorithm-tlv-support {
+      presence "Support of SR-Algorithm sub-tlv.";
+      description
+        "Support of SR-Algorithm sub-tlv.";
+      
+      leaf-list algo-support {
+        type uint8;
+        description
+          "Supported algorithms.";
+      }
+    }
+
+    leaf sr-lb-tlv-support {
+      type isis-pics:support;
+      description
+       "Support of the SR Local Block sub-tlv.";
+    }
+
+    leaf srms-preference-tlv-support {
+      type isis-pics:support;
+      description
+       "Support of the SRMS Preference sub-tlv.";
+    }
+  }
+
+  augment "/isis-pics:isis-pics/isis-pics:isis-pics-mptlv" 
+  {
+    description
+      "Augment isis-pics-mptlv container with the TLVs defined
+       in RFC 8667.";
+
+    leaf sid-label-binding-support {
+      type isis-pics:support;
+      description
+        "MP-TLV support of Segment Identifier/Label Binding TLV
+        (type 149).";
+    }
+
+    leaf mt-sid-label-binding-support {
+      type isis-pics:support;
+      description
+        "MP-TLV support of Multi-Topology Segment Identifier/Label
+        Binding TLV(type 150).";
+    }
+  }
 }
 <CODE ENDS>
       ]]></artwork>
-    </section>
+
   </section>
 
 
@@ -375,7 +405,7 @@ module ietf-isis-pics {
       </t>
 
       <t>
-        Some of the readable data nodes in the ietf-isis-pics.yang module
+        Some of the readable data nodes in the ietf-isis-pics-sr-mpls.yang module
         may be considered sensitive or vulnerable in some network environments. It is thus
         important to control read access (e.g., via get, get-config, or notification)
         to these data nodes.
@@ -383,54 +413,41 @@ module ietf-isis-pics {
 
    </section>
 <section title="IANA Considerations">
-  <t>This document defines the initial version of the IANA-maintained
-    iana-isis-pics YANG module.
-  </t>
-  <t>The document requests IANA to create a "IS-IS PICS" registry, and
-   iana-isis-pics YANG module is intended to reflect the the registry.
+  <t>The document requests IANA to create a entry, called isis-pics-sr-mpls
+   in the "IS-IS PICS" registry <xref target="I-D.qgp-lsr-isis-pics-yang"/>.
  </t>
- <t>When a IS-IS PICS is added to the registry, a new "identity" statement
-  must be added to the iana-isis-pics YANG module. The following substatements to the
-  "identity" statement should be defined:
+ <t>This document requests IANA to add a new "identity" to the iana-isis-pics
+  YANG module. The following statement is suggested:
   </t>
   <artwork>
-  "base": contains the value of "isis-pic".
-  "reference": the corresponding RFC information.
+    identity isis-pics-sr-mpls {
+     base "isis-pics";
+     description
+        "The identity for support of SR MPLS.";
+      reference
+        "RFC 8667: IS-IS Extensions for Segment Routing.";
+    }
   </artwork>
-
-  <t>When the iana-isis-pis YANG module is updated, a new "revision"
-    statement must be added in from of the existing revision statements.</t>
 
   <t>
     This document registers a URI in the IETF XML registry
     <xref target="RFC3688"/>.  Following the format in <xref target="RFC3688"/>,
-    the following registrations are requested to be made:
+    the following registration is requested to be made:
   </t>
 
    <artwork>
-   URI: urn:ietf:params:xml:ns:yang:iana-isis-pics
-   Registrant Contact: IANA.
-   XML: N/A, the requested URI is an XML namespace.
-   </artwork>
-   <artwork>
-   URI: urn:ietf:params:xml:ns:yang:ietf-isis-pics
+   URI: urn:ietf:params:xml:ns:yang:ietf-isis-pics-sr-mpls
    Registrant Contact: The IESG.
    XML: N/A, the requested URI is an XML namespace.
    </artwork>
    <t>
-     This document registers the following two YANG module in the YANG Module Names
+     This document registers a YANG module in the YANG Module Names
      registry <xref target="RFC6020"/>.
    </t>
    <artwork>
-   name: iana-isis-pics
-   namespace: urn:ietf:params:xml:ns:yang:iana-isis-pics
-   prefix: iana-isis-pics
-   reference: RFC XXXX
-   </artwork>
-    <artwork>
-   name: ietf-isis-pics
-   namespace: urn:ietf:params:xml:ns:yang:ietf-isis-pics
-   prefix: isis-pics
+   name: ietf-isis-pics-sr-mpls
+   namespace: urn:ietf:params:xml:ns:yang:ietf-isis-pics-sr-mpls
+   prefix: isis-pics-sr-mpls
    reference: RFC XXXX
    </artwork>
 </section>
@@ -470,6 +487,7 @@ module ietf-isis-pics {
       &RFC8341;
       &RFC8342;
       &RFC8446;
+      &RFC8667;
       <reference anchor="ISO10589" target="ISO/IEC 10589:2002">
         <front>
           <title>
@@ -481,6 +499,7 @@ module ietf-isis-pics {
           <date month="August" year="1987"/>
         </front>
       </reference>
+      &I-D.qgp-lsr-isis-pics-yang;
     </references>
     <references title="Informative References">
       <!-- Here we use entities that we defined at the beginning. -->

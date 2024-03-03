@@ -25,14 +25,14 @@ module ietf-isis-pics-sr-mpls {
                <mailto:prz@juniper.net>";
 
   description
-    "ISIS Protocol Implementation Conformance Statement (PICS) is
-     defined in ISO 10589. The YANG module is used to query an IS-IS
-     PICS of Segment Routing for MPLS data plane.
+    "The YANG module is used to query an IS-IS Protocol 
+     Implementation Conformance Statement (PICS) of Segment
+     Routing for MPLS data plane (RFC8667).
 
      This YANG model conforms to the Network Management
      Datastore Architecture (NMDA) as described in RFC 8342.
 
-     Copyright (c) 2023 IETF Trust and the persons identified as
+     Copyright (c) 2024 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -52,13 +52,13 @@ module ietf-isis-pics-sr-mpls {
      described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
      they appear in all capitals, as shown here.";
   reference
-    "RFC XXXX: YANG Data Model for IS-IS PICS";
+    "RFC XXXX: YANG Data Model for IS-IS Segment Routing MPLS PICS";
 
-  revision 2023-10-18 {
+  revision 2024-01-31 {
     description
       "Initial Version";
     reference
-      "RFC XXXX: YANG Data Model for IS-IS PICS.";
+      "RFC XXXX: YANG Data Model for IS-IS Segment Routing MPLS PICS.";
   }
 
   container isis-pics-sr-mpls {
@@ -68,6 +68,7 @@ module ietf-isis-pics-sr-mpls {
         "This container only exists when isis-pics-sr-mpls is present
          in the ietf-isis-pics module.";
     }
+    config false;
     description
       "IS-IS Protocol Implementation Conformance Statement (PICS) of
        Segment Routing on MPLS data plane.";
@@ -77,6 +78,7 @@ module ietf-isis-pics-sr-mpls {
 
     container sr-capability-sub-tlv-support {
       presence "Support of sr-capability sub-tlv.";
+      //config false;
       description
         "Support of sr-capability sub-tlv.";
 

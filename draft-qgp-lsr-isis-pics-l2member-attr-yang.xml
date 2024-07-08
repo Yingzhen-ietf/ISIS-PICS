@@ -171,10 +171,6 @@
 module: ietf-isis-pics-l2-member-attr
   +--ro isis-pics-l2-member-attr
      +--ro l2-bundle-member-attributes-tlv-support!
-        +--ro parallel-l3-adj
-        |  +--ro ipv4-int-addr?          isis-pics:support
-        |  +--ro ipv6-int-addr?          isis-pics:support
-        |  +--ro link-local-remote-id?   isis-pics:support
         +--ro shared-attribute-sub-tlv-support*   uint8
 
   augment /isis-pics:isis-pics/isis-pics:isis-pics-mptlv:
@@ -270,29 +266,6 @@ module ietf-isis-pics-l2-member-attr {
       presence "Support of L2 bundle member attributes tlv.";
       description
         "Support of L2 bundle member attributes tlv (Type 25)."; 
-
-      container parallel-l3-adj {
-        leaf ipv4-int-addr {
-          type isis-pics:support;
-          description
-            "Support to uniquely identify the L3 neighbor using
-             IPv4 Interface Address (sub-tlv 6 defined in RFC5305)";
-        }
-        leaf ipv6-int-addr {
-          type isis-pics:support;
-          description
-            "Support to uniquely identify the L3 neighbor using
-             IPv6 Interface Address (sub-tlv 12 defined in RFC6119)";
-        }
-        leaf link-local-remote-id {
-          type isis-pics:support;
-          description
-            "Support to uniquely identify the L3 neighbor using
-             Link Local/Remote Identifiers (sub-tlv 4 defined in
-             RFC5307)";
-        }
-
-      } 
 
       leaf-list shared-attribute-sub-tlv-support {
         type uint8;

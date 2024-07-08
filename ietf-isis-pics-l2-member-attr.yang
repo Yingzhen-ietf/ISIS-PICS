@@ -81,29 +81,6 @@ module ietf-isis-pics-l2-member-attr {
       description
         "Support of L2 bundle member attributes tlv (Type 25)."; 
 
-      container parallel-l3-adj {
-        leaf ipv4-int-addr {
-          type isis-pics:support;
-          description
-            "Support to uniquely identify the L3 neighbor using
-             IPv4 Interface Address (sub-tlv 6 defined in RFC5305)";
-        }
-        leaf ipv6-int-addr {
-          type isis-pics:support;
-          description
-            "Support to uniquely identify the L3 neighbor using
-             IPv6 Interface Address (sub-tlv 12 defined in RFC6119)";
-        }
-        leaf link-local-remote-id {
-          type isis-pics:support;
-          description
-            "Support to uniquely identify the L3 neighbor using
-             Link Local/Remote Identifiers (sub-tlv 4 defined in
-             RFC5307)";
-        }
-
-      } 
-
       leaf-list shared-attribute-sub-tlv-support {
         type uint8;
         description

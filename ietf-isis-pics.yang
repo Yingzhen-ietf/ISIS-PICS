@@ -13,12 +13,14 @@ module ietf-isis-pics {
     "WG Web:   <http://datatracker.ietf.org/wg/lsr>
      WG List:  <mailto:lsr@ietf.org>
 
-     Author:    Yingzhen Qu
+     Author:   Yingzhen Qu
                <mailto:yingzhen.ietf@gmail.com>
      Author:   Les Ginsberg
                <mailto:ginsberg@cisco.com>
      Author:   Tony Przygienda
-               <mailto:prz@juniper.net>";
+               <mailto:prz@juniper.net>
+     Author:   Yongqing Zhu
+               <mailto:zhuyq8@chinatelecom.cn>";
 
   description
     "The YANG module is used to query an IS-IS implementation
@@ -39,17 +41,12 @@ module ietf-isis-pics {
 
      This version of this YANG module is part of RFC XXXX
      (https://www.rfc-editor.org/info/rfcXXXX); see the RFC itself
-     for full legal notices.
+     for full legal notices.";
 
-     The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
-     NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'NOT RECOMMENDED',
-     'MAY', and 'OPTIONAL' in this document are to be interpreted as
-     described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
-     they appear in all capitals, as shown here.";
   reference
     "RFC XXXX: YANG Data Model for IS-IS PICS";
 
-  revision 2024-01-31 {
+  revision 2024-07-03 {
     description
       "Initial Version";
     reference
@@ -73,7 +70,6 @@ module ietf-isis-pics {
       type identityref {
         base iana-isis-pics:isis-pics;
       }
-      //config false;
       description
         "List of supported isis pics.";
     }

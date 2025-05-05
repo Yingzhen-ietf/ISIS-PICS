@@ -29,7 +29,7 @@
     <!ENTITY RFC8667 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8667.xml'>
     <!ENTITY I-D.ietf-lsr-isis-pics-yang PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-ietf-lsr-isis-pics-yang-00.xml'>
+      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-ietf-lsr-isis-pics-yang-01.xml'>
     ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc strict="no" ?>
@@ -40,7 +40,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-isis-pics-srmpls-yang-00" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-isis-pics-srmpls-yang-01" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -232,7 +232,7 @@ module: ietf-isis-pics-sr-mpls
   <section title="IS-IS PICS SR-MPLS YANG Modules">
 
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-isis-pics-sr-mpls@2024-07-03.yang"
+<CODE BEGINS> file "ietf-isis-pics-sr-mpls@2025-05-05.yang"
 module ietf-isis-pics-sr-mpls {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics-sr-mpls";
@@ -258,6 +258,8 @@ module ietf-isis-pics-sr-mpls {
                <mailto:ginsberg@cisco.com>
      Author:   Tony Przygienda
                <mailto:prz@juniper.net>
+     Author:   Bruno Decraene
+               <mailto:bruno.decraene@orange.com>
      Author:   Yongqing Zhu
                <mailto:zhuyq8@chinatelecom.cn>";
 
@@ -269,7 +271,7 @@ module ietf-isis-pics-sr-mpls {
      This YANG model conforms to the Network Management
      Datastore Architecture (NMDA) as described in RFC 8342.
 
-     Copyright (c) 2024 IETF Trust and the persons identified as
+     Copyright (c) 2025 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -286,7 +288,7 @@ module ietf-isis-pics-sr-mpls {
   reference
     "RFC XXXX: YANG Data Model for IS-IS Segment Routing MPLS PICS";
 
-  revision 2024-07-03 {
+  revision 2025-05-05 {
     description
       "Initial Version";
     reference
@@ -310,7 +312,6 @@ module ietf-isis-pics-sr-mpls {
 
     container sr-capability-sub-tlv-support {
       presence "Support of sr-capability sub-tlv.";
-      //config false;
       description
         "Support of sr-capability sub-tlv (Type 2).";
 
@@ -571,7 +572,7 @@ module ietf-isis-pics-sr-mpls {
     identity isis-pics-sr-mpls {
      base "isis-pics";
      description
-        "The identity for support of SR MPLS.";
+        "The identity for IS-IS PICS support of SR MPLS.";
       reference
         "RFC 8667: IS-IS Extensions for Segment Routing.";
     }

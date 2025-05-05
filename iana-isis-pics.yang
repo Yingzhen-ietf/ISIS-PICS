@@ -19,7 +19,7 @@ module iana-isis-pics {
     "The YANG module defines the identities for IS-IS Protocol
      Implementation Conformance Statement (PICS).
 
-     Copyright (c) 2023 IETF Trust and the persons identified as
+     Copyright (c) 2025 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -33,7 +33,7 @@ module iana-isis-pics {
      (https://www.rfc-editor.org/info/rfcXXXX); see the RFC itself
      for full legal notices.";
 
-  revision 2023-10-18 {
+  revision 2025-05-05 {
     description
       "Initial Version";
     reference
@@ -50,7 +50,7 @@ module iana-isis-pics {
   identity isis-pics-sr-mpls {
     base "isis-pics";
     description
-      "The identity for support of SR MPLS.";
+      "The identity for IS-IS PICS support of SR MPLS.";
     reference
       "RFC 8667: IS-IS Extensions for Segment Routing.";
   }

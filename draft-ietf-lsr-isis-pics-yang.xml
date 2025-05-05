@@ -36,7 +36,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-isis-pics-yang-00" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-isis-pics-yang-01" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -235,7 +235,7 @@ module iana-isis-pics {
     "The YANG module defines the identities for IS-IS Protocol
      Implementation Conformance Statement (PICS).
 
-     Copyright (c) 2024 IETF Trust and the persons identified as
+     Copyright (c) 2025 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -249,7 +249,7 @@ module iana-isis-pics {
      (https://www.rfc-editor.org/info/rfcXXXX); see the RFC itself
      for full legal notices.";
 
-  revision 2024-03-03 {
+  revision 2025-05-05 {
     description
       "Initial Version";
     reference
@@ -269,7 +269,7 @@ module iana-isis-pics {
     </section>
     <section title="ISIS PICS Module">
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-isis-pics@2024-07-03.yang"
+<CODE BEGINS> file "ietf-isis-pics@2025-05-05.yang"
 module ietf-isis-pics {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-isis-pics";
@@ -291,6 +291,8 @@ module ietf-isis-pics {
                <mailto:ginsberg@cisco.com>
      Author:   Tony Przygienda
                <mailto:prz@juniper.net>
+     Author:   Bruno Decraene
+               <mailto:bruno.decraene@orange.com>
      Author:   Yongqing Zhu
                <mailto:zhuyq8@chinatelecom.cn>";
 
@@ -301,7 +303,7 @@ module ietf-isis-pics {
      This YANG model conforms to the Network Management
      Datastore Architecture (NMDA) as described in RFC 8342.
 
-     Copyright (c) 2024 IETF Trust and the persons identified as
+     Copyright (c) 2025 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -318,7 +320,7 @@ module ietf-isis-pics {
   reference
     "RFC XXXX: YANG Data Model for IS-IS PICS";
 
-  revision 2024-07-03 {
+  revision 2025-05-05 {
     description
       "Initial Version";
     reference
@@ -391,28 +393,11 @@ module ietf-isis-pics {
 
    </section>
 <section title="IANA Considerations">
-  <t>This document defines the initial version of the IANA-maintained
-    iana-isis-pics YANG module.
-  </t>
-  <t>The document requests IANA to create a "IS-IS PICS" registry, and
-   iana-isis-pics YANG module is intended to reflect the the registry.
- </t>
- <t>When a IS-IS PICS is added to the registry, a new "identity" statement
-  must be added to the iana-isis-pics YANG module. The following substatements to the
-  "identity" statement should be defined:
-  </t>
-  <artwork>
-  "base": contains the value of "isis-pic".
-  "reference": the corresponding RFC information.
-  </artwork>
-
-  <t>When the iana-isis-pis YANG module is updated, a new "revision"
-    statement must be added in from of the existing revision statements.</t>
-
-  <t>
-    This document registers a URI in the IETF XML registry
-    <xref target="RFC3688"/>.  Following the format in <xref target="RFC3688"/>,
-    the following registrations are requested to be made:
+  <section title="Registering YANG Modules">
+    <t>
+    This document registers URIs in the IETF XML registry as defined in
+    <xref target="RFC3688"/>.  The following registrations are requested
+    to be made:
   </t>
 
    <artwork>
@@ -426,7 +411,7 @@ module ietf-isis-pics {
    XML: N/A, the requested URI is an XML namespace.
    </artwork>
    <t>
-     This document registers the following two YANG module in the YANG Module Names
+     This document registers the following two YANG module in the "YANG Module Names"
      registry <xref target="RFC6020"/>.
    </t>
    <artwork>
@@ -441,6 +426,36 @@ module ietf-isis-pics {
    prefix: isis-pics
    reference: RFC XXXX
    </artwork>
+  </section>
+  <section title="IANA ISIS-PICS Module">
+    <t>This document defines the initial version of the IANA-maintained
+    iana-isis-pics YANG module.
+  </t>
+  <t>The document requests IANA to create a "IS-IS PICS" registry, and
+   iana-isis-pics YANG module is intended to reflect the the registry.
+ </t>
+ <t>When a IS-IS PICS moduel is published, it MUST define how a new "identity" statement
+  should be added to the iana-isis-pics module. The following guidlines should be followed.
+</t>
+<t>
+  The name of the "identity" is "isis-pics-" plus the lowercase of the RFC name abbreviation. The
+  "identity" statement should have the following substatements defined:
+  </t>
+  <artwork>
+  "base": contains the value of "isis-pics".
+  "description": contains "The identity for IS-IS PICS support of xxxx.",
+                 replace the "xxxx" with the RFC information.
+  "reference": the corresponding RFC information.
+  </artwork>
+
+    <t>When the iana-isis-pis YANG module is updated, a new "revision"
+    statement must be added in from of the existing revision statements.</t>
+  </section>
+
+
+
+
+
 </section>
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>The YANG model was developed using the suite of YANG tools written

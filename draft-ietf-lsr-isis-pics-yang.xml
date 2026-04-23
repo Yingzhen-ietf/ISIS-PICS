@@ -4,14 +4,12 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'>
     <!ENTITY RFC3688 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3688.xml'>
+    <!ENTITY RFC4252 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4252.xml'>
     <!ENTITY RFC6020 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6020.xml'>
     <!ENTITY RFC6241 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6241.xml'>
-    <!ENTITY RFC6242 PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6242.xml'>
-    <!ENTITY RFC6991 PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6991.xml'>
     <!ENTITY RFC7950 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7950.xml'>
     <!ENTITY RFC8040 PUBLIC ''
@@ -26,6 +24,8 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8342.xml'>
     <!ENTITY RFC8446 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml'>
+    <!ENTITY RFC9000 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.9000.xml'>
     ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc strict="no" ?>
@@ -36,7 +36,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-isis-pics-yang-01" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-isis-pics-yang-02" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -193,7 +193,7 @@
     </section>
 
   <section title="IS-IS PICS YANG Trees">
-    <section title="IETF ISIS PICS YANG Tree">
+    <section title="IETF IS-IS PICS YANG Tree">
     <t>
       The following figure shows the tree diagram of the ietf-isis-pics
       module.
@@ -267,7 +267,7 @@ module iana-isis-pics {
 <CODE ENDS>
       ]]></artwork>
     </section>
-    <section title="ISIS PICS Module">
+    <section title="IS-IS PICS Module">
       <artwork><![CDATA[
 <CODE BEGINS> file "ietf-isis-pics@2025-05-05.yang"
 module ietf-isis-pics {
@@ -367,22 +367,19 @@ module ietf-isis-pics {
     <!-- Possibly a 'Contributors' section ... -->
 
     <section anchor="Security" title="Security Considerations">
-      <t>
-        The YANG modules specified in this document define a schema for
-        data that is designed to be accessed via network
-        management protocols such as NETCONF <xref target="RFC6241"/> or
-        RESTCONF <xref target="RFC8040"/>. The lowest NETCONF layer is the secure transport
-        layer, and the mandatory-to-implement secure transport is Secure Shell (SSH)
-        <xref target="RFC6242"/>. The lowest RESTCONF layer is HTTPS, and the
-        mandatory-to-implement secure transport is TLS <xref target="RFC8446"/>.
-      </t>
+ <t>   The YANG modules defined in this document are
+   designed to be accessed via YANG-based management protocols, such as
+   NETCONF <xref target="RFC6241"/> and RESTCONF <xref target="RFC8040"/>.
+   These protocols have to use a secure transport layer (e.g., SSH
+   <xref target="RFC4252"/>, TLS <xref target="RFC8446"/>, and
+   QUIC <xref target="RFC9000"/>) and have to use mutual authentication.</t>
 
-      <t>
-        The NETCONF access control model <xref target="RFC8341"/> provides the
-        means to restrict access for particular NETCONF or RESTCONF users to a
-        pre-configured subset of all available NETCONF or RESTCONF protocol
-        operations and content.
-      </t>
+ <t>
+    The Network Configuration Access Control Model (NACM) <xref target="RFC8341"/>
+    provides the means to restrict access for particular NETCONF or
+    RESTCONF users to a preconfigured subset of all available NETCONF or
+    RESTCONF protocol operations and content.
+ </t>
 
       <t>
         Some of the readable data nodes in the ietf-isis-pics.yang module
@@ -442,10 +439,10 @@ module ietf-isis-pics {
   "identity" statement should have the following substatements defined:
   </t>
   <artwork>
-  "base": contains the value of "isis-pics".
-  "description": contains "The identity for IS-IS PICS support of xxxx.",
-                 replace the "xxxx" with the RFC information.
-  "reference": the corresponding RFC information.
+  "base":        contains the value of "isis-pics".
+  "description": contains "The identity for IS-IS PICS support of
+                 xxxx.", replace the "xxxx" with the RFC information.
+  "reference":   the corresponding RFC information.
   </artwork>
 
     <t>When the iana-isis-pis YANG module is updated, a new "revision"
@@ -483,16 +480,16 @@ module ietf-isis-pics {
       <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
       &RFC2119;
       &RFC3688;
+      &RFC4252;
       &RFC6020;
       &RFC6241;
-      &RFC6242;
-      &RFC6991;
       &RFC7950;
       &RFC8040;
       &RFC8174;
       &RFC8341;
       &RFC8342;
       &RFC8446;
+      &RFC9000;
       <reference anchor="ISO10589" target="ISO/IEC 10589:2002">
         <front>
           <title>

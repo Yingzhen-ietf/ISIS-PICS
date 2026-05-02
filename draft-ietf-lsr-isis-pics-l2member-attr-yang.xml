@@ -29,7 +29,7 @@
     <!ENTITY RFC9000 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.9000.xml'>
     <!ENTITY I-D.ietf-lsr-isis-pics-yang PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-ietf-lsr-isis-pics-yang-02.xml'>
+      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-ietf-lsr-isis-pics-yang-03.xml'>
     ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc strict="no" ?>
@@ -40,7 +40,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-isis-pics-l2member-attr-yang-02" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-isis-pics-l2member-attr-yang-03" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
